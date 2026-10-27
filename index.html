@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#111b1c">
+  <title>Soft Steps — collective sound, shared space</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <main class="installation" data-state="quiet">
+    <div class="scene" aria-label="Rugby fans leaving the stadium at dusk, with sound-reactive stair projections">
+      <div class="scene-frame">
+        <!-- One fixed, edited background plate. All coordinates below use its 1672×941 frame. -->
+        <img class="scene-image" src="assets/stadium-clean-plate.png" alt="Rugby fans walking down stadium exit stairs at dusk, with a vertical sound signal on the right.">
+        <svg class="projections" viewBox="0 0 1672 941" aria-hidden="true">
+          <defs>
+            <clipPath id="stairs-mask"><path d="M0 205L245 210L1242 564L1276 780L490 941H0Z"/></clipPath>
+            <radialGradient id="projection-fade"><stop offset="0" stop-color="white" stop-opacity=".82"/><stop offset=".65" stop-color="white" stop-opacity=".62"/><stop offset="1" stop-color="white" stop-opacity="0"/></radialGradient>
+            <mask id="projection-softness" maskContentUnits="objectBoundingBox"><rect width="1" height="1" fill="url(#projection-fade)"/></mask>
+            <!-- Foreground occlusion: keep projected light on stone, behind the fans' shoes/legs. -->
+            <mask id="visitor-occlusion" maskUnits="userSpaceOnUse" x="0" y="0" width="1672" height="941">
+              <rect width="1672" height="941" fill="white"/>
+              <g fill="black">
+                <!-- Additional foreground exclusions for the expanded eight-group layout. -->
+                <path d="M138 219L168 222L161 280L154 299L165 307L160 316L135 313L129 300L130 264Z"/>
+                <path d="M424 492L566 488L550 570L523 617L480 623L470 573L438 590Z"/>
+                <path d="M975 465L1024 460L1050 520L1038 588L1029 632L1010 636L991 602Z"/>
+                <path d="M153 653L180 641L213 697L218 732L234 745L217 765L196 779L180 770L177 748L168 723Z"/>
+                <path d="M315 635L345 633L351 692L371 714L376 731L361 744L342 739L328 722Z"/>
+                <path d="M434 634L462 631L477 695L466 721L480 741L468 751L443 734L435 713Z M492 657L520 652L502 720L518 737L528 758L513 774L487 765L478 747L477 722Z"/>
+                <path d="M636 522L658 521L660 573L676 586L690 595L683 605L657 600L647 587Z M722 508L747 511L749 553L743 569L754 581L746 589L731 584L724 566Z"/>
+                <path d="M819 516L842 518L841 561L859 576L871 582L858 591L834 586L825 572Z"/>
+                <path d="M993 584L1017 580L1020 625L1040 647L1046 662L1031 674L1012 671L1003 649Z M1087 594L1110 592L1107 646L1121 666L1119 682L1100 684L1084 670Z"/>
+              </g>
+            </mask>
+          </defs>
+          <g clip-path="url(#stairs-mask)" mask="url(#visitor-occlusion)"><g id="bubbles"></g></g>
+          <g id="anchor-markers"></g>
+        </svg>
+        <svg class="signal-overlay" viewBox="0 0 1672 941" role="img" aria-label="Sound signal device">
+          <path class="signal-edge" d="M1284 361L1286 768M1405 403L1414 777"/>
+          <g class="signal-face" transform="translate(1303 418) scale(.76 1.04)">
+            <circle cx="50" cy="40" r="40" class="face-disc"/>
+            <g class="face-ink"><ellipse cx="34" cy="32" rx="4" ry="5"/><ellipse cx="66" cy="32" rx="4" ry="5"/>
+              <path id="mouth" d="M29 49 Q50 70 71 49"/>
+              <path class="shh-finger" d="M47 70V51Q47 45 52 46Q56 46 56 51V65L59 59Q62 57 65 61L69 62Q73 62 74 68L75 80Q72 91 58 91L47 84L40 74Q37 68 42 67Z"/>
+              <path class="serious-brows" d="M27 21L40 24M60 24L73 21"/>
+            </g>
+          </g>
+          <text id="device-title" class="signal-title" x="1341" y="540" text-anchor="middle"><tspan x="1341">Great</tspan><tspan x="1341" dy="29">job!</tspan></text>
+          <g class="signal-bars" transform="matrix(1 .1 0 1 1321 687)" aria-hidden="true"><rect y="0"/><rect y="-9"/><rect y="-18"/><rect y="-27"/><rect y="-36"/><rect y="-45"/><rect y="-54"/><rect y="-63"/><rect y="-72"/></g>
+        </svg>
+      </div>
+    </div>
+    <div class="presentation-controls"><button id="presentation-toggle">Presentation Mode</button><span>P: present · D: debug · Esc: controls</span></div>
+
+    <header class="masthead">
+      <a class="wordmark" href="./" aria-label="Soft Steps home"><span class="brand-mark" aria-hidden="true">((</span> soft steps<span class="brand-dot">®</span></a>
+      <div class="project-tag"><span></span> AN INTERACTION IN SHARED SPACE</div>
+      <button class="icon-button" id="info-toggle" aria-expanded="false" aria-controls="concept-info" aria-label="About this installation">i</button>
+    </header>
+
+    <section class="intro">
+      <div class="eyebrow">THE MATCH ENDS. THE NEIGHBOURHOOD RESTS.</div>
+      <h1>A little quieter.<br>A little kinder.</h1>
+      <p>See the sound we make together.</p>
+      <div class="scene-caption"><span class="tiny-cross">+</span> STADIUM EXIT · DUSK<br><span class="caption-sub">Interactive installation concept / 01</span></div>
+    </section>
+
+    <aside id="concept-info" class="concept-info" hidden>
+      <strong>One staircase. One shared sound.</strong>
+      <p>The microphone measures the overall sound around you. As it grows, every light bubble grows together and the signal changes.</p>
+      <p>Colours suggest visitor groups. They never indicate volume. The stadium photograph stays fixed while its light overlays react.</p>
+      <p>Audio is analysed locally in your browser, with no recording or upload.</p>
+    </aside>
+
+    <div class="scene-note"><span class="live-dot"></span> COLLECTIVE SOUND, SHARED SPACE <span class="note-line"></span> CONCEPT VISUALISATION</div>
+
+    <section class="control-panel" aria-label="Sound simulation controls">
+      <div class="panel-top">
+        <div class="status-block"><span class="section-label">THE STAIRCASE RIGHT NOW</span><div class="state-line"><span class="state-dot"></span><strong id="state-label" role="status">Quiet / calm</strong></div></div>
+        <div class="mode-switch" role="group" aria-label="Input mode"><button id="manual-mode" class="mode active" aria-pressed="true">Manual demo</button><button id="mic-mode" class="mode" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="7" y="2" width="6" height="10" rx="3"/><path d="M4 9a6 6 0 0 0 12 0M10 15v3M7 18h6"/></svg>Microphone</button></div>
+      </div>
+      <div class="panel-bottom">
+        <div class="level-control"><div class="level-heading"><label for="sound-level">Environmental sound</label><span><b id="level-value">4</b><span class="level-unit"> / 100</span></span></div><input id="sound-level" type="range" min="0" max="100" value="4" aria-label="Simulated environmental sound level"><div class="range-labels"><span>Quiet</span><span>Loud</span></div></div>
+        <div class="preset-buttons" role="group" aria-label="Simulate a sound state"><button data-level="4" aria-pressed="true" class="selected"><span class="preset-dot quiet"></span>Quiet</button><button data-level="13" aria-pressed="false"><span class="preset-dot medium"></span>Getting louder</button><button data-level="28" aria-pressed="false"><span class="preset-dot loud"></span>Too loud</button></div>
+      </div>
+      <div class="panel-footer"><span id="input-status" role="status">Move the slider or choose a sound level to explore.</span><button id="debug-toggle" aria-expanded="false" aria-controls="debug-panel">Debug Mode</button><span class="privacy"><span></span> AUDIO STAYS ON YOUR DEVICE</span></div>
+    </section>
+    <aside id="debug-panel" class="debug-panel" hidden aria-label="Sound debug controls">
+      <strong>Classroom sound settings</strong>
+      <label class="anchor-toggle"><input id="show-anchors" type="checkbox"> Show Anchors</label>
+      <p>Microphone: <span id="microphone-status">Not requested</span><br>Current state: <span id="debug-state">Quiet / calm</span></p>
+      <div class="debug-readings">Live level <output id="debug-level">4.0</output> / 100 <span id="debug-source">Manual</span></div>
+      <label for="sensitivity">Sensitivity <output id="sensitivity-label">Medium sensitivity</output></label>
+      <input id="sensitivity" type="range" min="0" max="2" step="1" value="1" aria-valuetext="Medium sensitivity">
+      <div class="range-labels"><span>Low sensitivity</span><span>Medium</span><span>High sensitivity</span></div>
+      <div class="threshold-fields"><label for="medium-threshold">Yellow starts at<input id="medium-threshold" type="number" min="1" max="98" step="0.1" value="8"></label><label for="loud-threshold">Red above<input id="loud-threshold" type="number" min="2" max="99" step="0.1" value="18"></label></div>
+      <p id="threshold-help">Quiet: below 8 · Yellow: 8–18 · Red: above 18.</p>
+      <button id="calibrate-room">Calibrate Room</button>
+      <p id="calibration-status" role="status">Listen for 3 seconds with the room at its usual quiet conversation level.</p>
+      <p class="debug-note">Smoothed relative amplitude, not dB. Sensitivity affects microphone input only. Settings reset on refresh.</p>
+    </aside>
+    <footer class="page-footer"><span>A PLAYFUL NUDGE TOWARDS A QUIETER JOURNEY HOME.</span><span class="colour-legend"><i></i><i></i><i></i><i></i> Different colours. One collective volume.</span></footer>
+  </main>
+</body>
+</html>
