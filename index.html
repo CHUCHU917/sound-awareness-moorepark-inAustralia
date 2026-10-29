@@ -7,6 +7,7 @@
   <title>Soft Steps — collective sound, shared space</title>
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
+  <script src="interaction-modes.js" defer></script>
 </head>
 <body>
   <main class="installation" data-state="quiet">
@@ -14,6 +15,37 @@
       <div class="scene-frame">
         <!-- One fixed, edited background plate. All coordinates below use its 1672×941 frame. -->
         <img class="scene-image" src="assets/stadium-clean-plate.png" alt="Rugby fans walking down stadium exit stairs at dusk, with a vertical sound signal on the right.">
+        <!-- Browser-only compositing. Supplied image files are never edited or regenerated. -->
+        <svg class="individual-effects" viewBox="0 0 1672 941" aria-hidden="true">
+          <defs>
+            <filter id="repair-feather"><feGaussianBlur stdDeviation="3"/></filter>
+            <mask id="individual-person-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="1672" height="941">
+              <rect width="1672" height="941" fill="white"/>
+              <g fill="black">
+                <path d="M173 438L288 443L273 573L273 637L263 671L280 702L271 719L241 724L224 709L225 680L216 638L212 600L214 540L211 570L213 623L217 665L217 680L201 689L182 687L181 669L172 627Z"/>
+                <path d="M337 459L455 459L437 552L412 650L415 680L410 702L382 705L369 691L366 668L353 665L350 650L344 606Z"/>
+                <path d="M487 443L626 443L624 537L600 579L581 650L588 676L590 697L571 704L554 693L555 671L559 638L548 599L548 626L554 666L555 693L566 715L551 728L528 725L519 705L523 676L523 648L516 603L503 577Z"/>
+                <path d="M828 449L936 452L933 522L918 568L899 614L898 642L900 661L892 677L870 675L858 663L858 638L860 615L858 574L848 538Z"/>
+                <path d="M971 461L1083 463L1074 544L1060 593L1047 661L1069 680L1062 695L1037 688L1023 676L1020 661L1021 608L1017 589L1009 614L1006 643L995 654L981 649L974 635L980 613L981 579L972 541Z"/>
+              </g>
+            </mask>
+            <mask id="individual-stair-repair" maskUnits="userSpaceOnUse" x="0" y="0" width="1672" height="941">
+              <g fill="white" filter="url(#repair-feather)"><path d="M0 538H718V785L450 876H0Z"/><path d="M725 540L1138 580L1225 750L815 800L730 710Z"/></g>
+            </mask>
+            <mask id="idle-marker-patches" maskUnits="userSpaceOnUse" x="0" y="0" width="1672" height="941"><g fill="white" filter="url(#repair-feather)"><ellipse cx="279" cy="790" rx="72" ry="20"/><ellipse cx="429" cy="730" rx="74" ry="20"/><ellipse cx="813" cy="636" rx="52" ry="16"/><ellipse cx="903" cy="560" rx="45" ry="16"/><ellipse cx="1117" cy="698" rx="58" ry="18"/></g></mask>
+          </defs>
+          <!-- Borrow empty stair texture only underneath the photographed light; retain the five visitors above it. -->
+          <g mask="url(#individual-person-mask)"><g mask="url(#individual-stair-repair)">
+            <image href="assets/passive-scene.png" width="1672" height="941"/>
+            <g mask="url(#idle-marker-patches)"><image href="assets/passive-scene.png" x="140" y="-10" width="1672" height="941"/></g>
+          </g></g>
+          <!-- Cover the photographed yellow graphics inside the existing housing, before the live signal is drawn. -->
+          <path d="M1287 369Q1340 369 1398 401L1407 778L1288 765Z" fill="#0c1110"/>
+          <path d="M1410 401L1418 779" fill="none" stroke="#14201d" stroke-width="8"/>
+        </svg>
+        <svg class="passive-ambient" viewBox="0 0 1672 941" aria-hidden="true">
+          <g id="passive-bubbles"></g>
+        </svg>
         <svg class="projections" viewBox="0 0 1672 941" aria-hidden="true">
           <defs>
             <clipPath id="stairs-mask"><path d="M0 205L245 210L1242 564L1276 780L490 941H0Z"/></clipPath>
@@ -36,7 +68,7 @@
               </g>
             </mask>
           </defs>
-          <g clip-path="url(#stairs-mask)" mask="url(#visitor-occlusion)"><g id="bubbles"></g></g>
+          <g id="projection-field" clip-path="url(#stairs-mask)" mask="url(#visitor-occlusion)"><g id="bubbles"></g></g>
           <g id="anchor-markers"></g>
         </svg>
         <svg class="signal-overlay" viewBox="0 0 1672 941" role="img" aria-label="Sound signal device">
@@ -91,6 +123,7 @@
     </section>
     <aside id="debug-panel" class="debug-panel" hidden aria-label="Sound debug controls">
       <strong>Classroom sound settings</strong>
+      <fieldset class="interaction-selector"><legend>Interaction mode</legend><div role="group" aria-label="Interaction mode"><button data-interaction-mode="passive" aria-pressed="false">Passive</button><button data-interaction-mode="individual" aria-pressed="false">Individual</button><button data-interaction-mode="group" aria-pressed="true">Group</button></div><p id="interaction-description" role="status">Group Interaction · existing collective sound demo.</p><span>Presentation shortcuts: 1 Passive · 2 Individual · 3 Group</span></fieldset>
       <label class="anchor-toggle"><input id="show-anchors" type="checkbox"> Show Anchors</label>
       <p>Microphone: <span id="microphone-status">Not requested</span><br>Current state: <span id="debug-state">Quiet / calm</span></p>
       <div class="debug-readings">Live level <output id="debug-level">4.0</output> / 100 <span id="debug-source">Manual</span></div>

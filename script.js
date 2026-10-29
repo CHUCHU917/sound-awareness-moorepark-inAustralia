@@ -50,7 +50,10 @@ const groups = [
   ] }
 ];
 const ns = 'http://www.w3.org/2000/svg';
-const bubbles = groups.flatMap((group, groupIndex) => {
+function renderBubbleGroups(layout) {
+document.querySelector('#bubbles').replaceChildren();
+document.querySelector('#anchor-markers').replaceChildren();
+return layout.flatMap((group, groupIndex) => {
   const groupLayer = document.createElementNS(ns, 'g');
   groupLayer.setAttribute('class', 'visitor-group');
   groupLayer.setAttribute('data-group-id', group.id);
@@ -92,11 +95,14 @@ const bubbles = groups.flatMap((group, groupIndex) => {
     return light;
   });
 });
+}
+let bubbles = renderBubbleGroups(groups);
 document.querySelector('#show-anchors').addEventListener('change', event => {
   root.dataset.showAnchors = String(event.target.checked);
 });
 
 let mode = 'manual';
+let interactionMode = 'group'; // Separate from input mode and the three sound states.
 let state = 'quiet';
 let level = Number(slider.value);
 let bubbleScale = .55;
@@ -378,7 +384,7 @@ function frame(now) {
     }
   }
   level += (target - level) * (1 - Math.exp(-delta / SMOOTHING_SECONDS));
-  const nextState = classify(level);
+  const nextState = interactionMode === 'passive' ? 'quiet' : classify(level);
   if (nextState !== candidateState) { candidateState = nextState; candidateSeconds = 0; }
   candidateSeconds += delta;
   if (mode === 'manual' || candidateSeconds >= STATE_HOLD_SECONDS) setState(nextState);

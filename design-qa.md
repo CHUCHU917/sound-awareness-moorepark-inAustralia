@@ -13,6 +13,31 @@ final result: passed
 
 ## Findings
 
+### Passive-only heartbeat refinement — 29 October 2026 (latest)
+
+- New source: `assets/passive-clean-scene.png`, a byte-identical copy of the supplied `passive mode-scenario.png`, with no baked-in bubbles. SHA-256 recorded in `assets/asset-notes.md`.
+- Replaced Passive's old fixed ellipses/continuous breathing with seven independent SVG markers. `passiveBubbles` stores percentage x/y, 20–40 px base diameters, fixed blue/green/yellow/pink colours, seven distinct delays, durations (3.8–4.7 s), and base opacities.
+- CSS rhythm: normal → 1.10 pulse at 10% → return at 18% → 1.06 pulse at 28% → return at 36% → hold through 100%. Only the inner pulse scales; the outer anchor never changes. Reduced motion disables pulses.
+- Evidence: `passive-heartbeat.png` at 1280 × 720. Browser computed styles confirmed seven `passiveHeartbeat` animations with independent durations/delays/opacities and simultaneous resting/pulsing markers. Source circle sizes remain tiny on the steps and all maximum pulse/glow bounds are separated.
+- Passive tested at normalized level 28: state remains quiet and supplied green photographic Signal stays calm. Regression tests also verify loud microphone input cannot change Passive marker configuration or Signal state.
+- `script.js`, thresholds, shared microphone implementation, Individual groups/scene/Signal and Group groups/scene/Signal were not edited in this refinement. Individual continues to preload/use the older `assets/passive-scene.png` as its unchanged texture source; changing the Passive scene path does not change Individual's existing composition.
+- Existing 220 ms fade-out + 220 ms fade-in remains a roughly 440 ms mode transition, including Passive bubbles. No new debug controls or layout changes.
+- Regression tests passed for double-pulse keyframe structure, removal of continuous breathing, diameter bounds, staggered timing, maximum-pulse non-overlap, microphone independence and existing mode tests. Final result remains passed.
+
+### Three-mode extension — 29 October 2026 (current)
+
+- Existing Group scene/configuration is unchanged. Added `interaction-modes.js`, an optional Debug Mode selector and 1/2/3 shortcuts. The shared analyser, capture settings, gain, thresholds, calibration and smoothing remain the existing implementation. Only the selected visual policy overrides the sound state to quiet in Passive.
+- Source files: `assets/passive-scene.png` and `assets/individual-scene.png`, both byte-identical to the supplied originals (hashes recorded in `assets/asset-notes.md`). No generation or image-file editing was used for this extension.
+- Current browser captures: `mode-selector.png`, `mode-passive.png`, `mode-individual-quiet.png`, `mode-individual-medium.png`, `mode-individual-loud.png`, and `mode-group-restored.png`. Actual capture viewport is 1280 × 720 CSS/pixels; source images are 1672 × 941, contained and scaled proportionally. Browser screenshots were inspected at their actual size rather than claimed as pixel-identical to a 1672-pixel source.
+- Passive checked with manual level 28: root state quiet, zero active person bubbles, seven fixed-radius ambient ellipses, original green photographic signal. Slow opacity breathing never changes circle size. High simulated microphone input also stays quiet in regression tests.
+- Individual checked at normalized 4/13/28: five people, green/yellow/red states, fixed blue/pink groups, changing scales and five lit bars at medium. Foot centres use hand-measured percentage anchors. The original photo's existing floor projections are isolated with masked empty-stair texture from the supplied Passive image, and its yellow device graphic is covered by a live SVG display. The source files and people are unchanged. Some original coloured spill on clothing and small local texture/blending differences remain (P3); professionally supplied unlit Individual imagery would improve compositing fidelity, but was not generated because the user explicitly requested supplied images only.
+- Refined the localized marker repair after the first quiet capture exposed a dark patch/remaining yellow ring. The revised source-texture offset, wider feathered masks and updated quiet capture remove that obvious artefact. The mode-specific layers do not render in Group.
+- Group restoration browser check: all ten anchor IDs, transforms and computed fill colours exactly equal the baseline recorded before mode switching. Existing four-group image/masks/scale function, microphone/manual controls and default thresholds 8/18 are retained.
+- Presentation check in Individual: zero visible buttons/inputs; mode keys work while presentation remains active. Anchor markers are now also suppressed in Presentation Mode as requested for this extension.
+- Browser console error query returned no errors. Regression tests passed for all modes, one shared analyser/context, Passive override, Individual quiet/medium/loud, Group restoration, threshold preservation, rapid switching and image-load failure fallback. Physical microphone hardware was not re-tested.
+- Local server restarted as a hidden Windows background process because the prior server was no longer running. Browser load and all three scene assets were verified after restart.
+- Final result remains passed for this extension, with the compositing polish limitation recorded above.
+
 ### Current placement-only correction (supersedes the eight-group refinement below)
 
 - Evidence: `foot-anchors-quiet.png`, `foot-anchors-loud.png`, and `foot-placement-final.png`; source remains the same clean-plate photograph.
